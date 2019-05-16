@@ -1,0 +1,160 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Post Content Column -->
+            <div class="col-lg-8">
+
+                <!-- Title -->
+                <h1 id="country" class="mt-4">
+                    <img src="/static/images/{{countryEle.attrib['id']}}.jpg" style="max-width:48px"> {{countryEle.attrib['name']}}</h1>
+
+
+                <!-- Author -->
+                <p class="lead">
+                    in
+                    <a href={{ url_for( 'home', continent=continent )}}>{{continent}}</a>
+                </p>
+
+                {% if countryEle.attrib['indep_date'] %}
+                <hr>
+                <!-- Date/Time -->
+                <p>Independented on {{countryEle.attrib['indep_date']}}</p>
+                {% endif %}
+
+                <hr>
+
+                <!-- Preview Image -->
+                {% if cities %}
+                <div id="map" alt="map" style="height:300px"></div>
+                <hr>
+                <!-- Post Content -->
+                <div style="display:none">
+                    <p id="caplat">{{cities[0].attrib['latitude']}}</p>
+                    <p id="caplong">{{cities[0].attrib['longitude']}}</p>
+                </div>
+                {% endif %}
+
+
+                <div class="row" style="margin-bottom: 100px">
+                    <!-- cities -->
+                    {% if cities %}
+                    <div class="col-lg-2 col-md-3 col-sm-4 mb-2" style="text-align:center">
+                        <a class="coverIcon" style="width:100%" data-toggle="collapse" href="#cityData" role="button">
+                            <img src="/static/images/city.png" alt="city" style="max-width: 64px">
+                        </a>
+                        <div class="collapse" id="cityData">
+                            {% for city in cities %}
+                            <p>{{city.find('name').text}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% for eco in ECOs %}
+                    {% if ECOs[eco] != [] %}
+                    <div class="col-lg-2 col-md-3 col-sm-4 mb-2" style="text-align:center">
+                        <a class="coverIcon" style="width:100%" data-toggle="collapse" href="#{{eco}}Data" role="button">
+                            <img src="/static/images/{{eco}}.png" alt="{{eco}}" style="max-width: 64px">
+                        </a>
+                        <div class="collapse" id="{{eco}}Data">
+                            {% for ele in ECOs[eco] %}
+                            <div style="width:100%">
+                                <p>{{ele.attrib['name']}}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <hr> 
+                </div>
+            </div>
+
+            <!-- Sidebar Widgets Column -->
+            <div class="col-md-4">
+
+                <!-- Search Widget -->
+                <!-- <div class="card my-4">
+                    <h5 class="card-header">Search</h5>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-secondary" type="button">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+
+
+                <!-- Side Widget -->
+                <div class="card my-4">
+                    <h5 class="card-header">Description</h5>
+                    <div class="card-body">
+                        {% for attr in countryEle.attrib %}
+                        {% if attr != 'id' %}
+                        {% if attr != 'capital' %}
+                        <p>{{attr}}: <b>{{countryEle.attrib[attr]}}</b></p>
+                        {% endif %}
+                        {% if attr == 'capital' %}
+                        <p>{{attr}}: <b>{{capital}}</b></p>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Categories Widget -->
+                <div class="card my-4">
+                        <h5 class="card-header">History</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for i in history %}
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a href={{url_for('detail', country=i)}}>{{i}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+
+    {% if cities %}
+    <script>
+        var map;
+        function initMap() {
+            var coor = {
+                lat: parseFloat(document.getElementById('caplat').innerText),
+                lng: parseFloat(document.getElementById('caplong').innerText)
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: coor,
+                zoom: 2
+            });
+            console.log(document.getElementById('country').innerText)
+            var marker = new google.maps.Marker({ position: coor, map: map });
+        }
+    </script> 
+    {% endif %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuMyPFzwq18c3SmVOlFKDF8EcAePvIBfo&callback=initMap" async
+        defer>
+        </script>
+{% endblock %}

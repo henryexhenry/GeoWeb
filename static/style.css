@@ -1,0 +1,34 @@
+.coverImg {
+    width: 100%;
+    height: 300px;
+    /* line-height: 200px; */
+    overflow: hidden;
+    text-align: center;
+    align-content: center;
+    vertical-align: -webkit-baseline-middle;
+}
+
+.coverImg img {
+    max-width: 100%;
+    vertical-align: middle;
+    /* margin: -100%; */
+    position: relative;
+}
+
+.coverIcon{
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    align-content: center;
+    vertical-align: -webkit-baseline-middle;
+}
+.coverIcon img {
+    max-width: 100%;
+    vertical-align: middle;
+    /* margin: -100%; */
+    position: relative;
+}
+
+#map {
+    height: 100%;
+  }
